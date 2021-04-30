@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="bit.com.a.dao.PdsDao">
+
+<select id="getPdsList" resultType="bit.com.a.dto.PdsDto">
+	SELECT SEQ,ID,TITLE,CONTENT,FILENAME,NEWFILENAME,READCOUNT,DOWNCOUNT,REGDATE,DEL
+	FROM PDS WHERE DEL=0 ORDER BY SEQ DESC
+</select>
+
+<insert id="uploadPds" parameterType="bit.com.a.dto.PdsDto">
+	INSERT INTO PDS(SEQ,ID,TITLE,CONTENT,FILENAME,NEWFILENAME,READCOUNT,DOWNCOUNT,REGDATE,DEL)
+	VALUES(SEQ_PDS.NEXTVAL,#{id},#{title},#{content},#{filename},#{newfilename},0,0,SYSDATE,0)
+</insert>
+
+<select id="getPds" parameterType="java.lang.Integer" resultType="bit.com.a.dto.PdsDto">
+	SELECT SEQ,ID,TITLE,CONTENT,FILENAME,NEWFILENAME,READCOUNT,DOWNCOUNT,REGDATE,DEL
+	FROM PDS WHERE SEQ=#{seq}
+</select>
+
+<update id="delPds" parameterType="java.lang.Integer">
+	UPDATE PDS SET DEL=1 WHERE SEQ=#{seq}
+</update>
+
+<update id="updatePds" parameterType="bit.com.a.dto.PdsDto">
+	UPDATE PDS SET TITLE=#{title}, CONTENT=#{content},
+	FILENAME=#{filename}, NEWFILENAME=#{newfilename}, REGDATE=SYSDATE
+	WHERE SEQ=#{seq}
+</update>
+
+
+</mapper>  
+
+
+
+
