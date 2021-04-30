@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>게시판 글쓰기</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- 제이쿼리 -->
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- 부트스트랩 -->
+<link rel="stylesheet" type="text/css" href="../css/button.css">
+<link rel="stylesheet" type="text/css" href="../css/table.css">
+
+</head>
+<body>
+
+<div class="box_border" style="margin-top: 5px; margin-bottom: 10px">
+
+	<form action="" id="_frmForm" method="get">
+	
+		<table class="list_table" style="width: 85%" id="_list_table">
+		  <colgroup>
+		  	<col style="width:70px">
+		  	<col style="width:auto">
+		  </colgroup>
+		  
+		  <tr>
+    		<th style="background: #eee; color: #3e5fba;">아이디</th>
+			<td style="text-align:left">&nbsp;
+				<input type="text" name="id" id="_id" size="100%" readonly="readonly" style="border: 1px solid #ddd">
+			</td>
+		  </tr>
+		  
+		  <tr>
+    		<th style="background: #eee; color: #3e5fba;">제 목</th>
+			<td style="text-align:left">&nbsp;
+				<input type="text" name="title" size="100%" style="border: 1px solid #ddd">
+			</td>
+		  </tr>
+		  
+		  <tr>
+    		<th style="background: #eee; color: #3e5fba;">내 용</th>
+			<td colspan="2" style="text-align:left">&nbsp;
+				<textarea rows="20" cols="98" name="content" style="border: 1px solid #ddd;"></textarea>
+			</td>
+		  </tr>
+		  
+		  <tr>
+			 <td colspan="2">
+				 <span class="button blue large">
+                 	<input type="button" id="btnWrite" value="글쓰기">
+				 </span>
+			 </td>
+		  </tr>
+		  
+		</table>
+		
+	</form>
+	
+</div>
+
+
+
+
+<script type="text/javascript">
+let url = "http://localhost:3000/";
+
+let login = JSON.parse( sessionStorage.getItem("login") );
+console.log(login.id);
+$("#_id").val(login.id);
+
+
+$("#btnWrite").on("click", function () {
+	let formData = $("#_frmForm").serialize();
+	$.ajax({
+		url:url+"writeBbs",
+		type:"get",
+		data:formData,
+		success:function(data){ //alert(">>"+data);
+			if(data > 0){
+				alert("글쓰기완료");
+			}else{
+				alert("글쓰기실패");
+			}
+			location.href = "bbslist.html";
+		},
+		error:function(){alert('error');}
+	});
+});
+
+</script>
+
+
+
+</body>
+</html>
+
+
+
+
+

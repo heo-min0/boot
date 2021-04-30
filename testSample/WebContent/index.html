@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body>
+
+<p id="demo"></p>
+
+<button type="button">click</button>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	$("button").click(function(){
+		//alert("clcl");
+		/* $.ajax({
+			url:"http://localhost:3000/test",
+			type:"get",
+			success:function(data){//alert("success");
+				//alert(data);
+				$("#demo").text(data);
+			},
+			error:function(){alert("error");}
+		}); */
+		
+		/* $.ajax({
+			url:"http://localhost:3000/member",
+			type:"get",
+			success:function(data){//alert("success");
+				console.log(JSON.stringify(data));
+				let a = JSON.stringify(data)
+				$("#demo").text(a);
+			},
+			error:function(){alert("error");}
+		});
+		
+		$.ajax({
+			url:"http://localhost:3000/conn_param",
+			type:"get",
+			data:{"title":"제목"},
+			success:function(data){//alert("success");
+				$("#demo").append(data);
+			},
+			error:function(){alert("error");}
+		}); */
+		
+		/* $.ajax({
+			url:"http://localhost:3000/conn_param_get",
+			type:"get",
+			data:{"id":"홍길동","pwd":"111","email":"hong@naver.com"},
+			success:function(data){//alert("success");
+				$("#demo").append(data);
+			},
+			error:function(){alert("error");}
+		}); */
+		
+		//cdn / cli (vscode)
+		
+		
+		$.ajax({
+			url:"http://localhost:3000/dbtest",
+			type:"get",
+			success:function(data){//alert("success");
+				$.each(data,function (i,val){
+					$("#demo").append(val.id+" ");
+					$("#demo").append(val.pwd+" ");
+					$("#demo").append(val.email+" ");
+					$("#demo").append(val.auth+"<br>");
+				})
+			},
+			error:function(){alert("error");}
+		});
+		
+	});
+	
+})
+
+</script>
+
+</body>
+</html>

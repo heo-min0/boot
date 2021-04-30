@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>게시판 수정페이지</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- 제이쿼리 -->
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- 부트스트랩 -->
+<link rel="stylesheet" type="text/css" href="../css/button.css">
+<link rel="stylesheet" type="text/css" href="../css/table.css">
+
+</head>
+<body>
+
+
+<div class="box_border" style="margin-top: 5px; margin-bottom: 10px">
+	<form action="" id="_frmForm" method="get">
+
+		<table class="list_table" style="width: 85%" id="_list_table">
+		  <colgroup>
+		  	<col style="width:70px">
+		  	<col style="width:auto">
+		  </colgroup>
+		  
+		  <tr>
+    		<th style="background: #eee; color: #3e5fba;">작성자</th>
+			<td style="text-align:left">&nbsp;
+				<span id="_id"></span>
+				<input type="hidden" id="_seq" name="seq">
+			</td>
+		  </tr>
+		  
+		  <tr>
+    		<th style="background: #eee; color: #3e5fba;">제 목</th>
+			<td style="text-align:left">&nbsp;
+				<input type="text" id="_title" name="title">
+			</td>
+		  </tr>
+		  
+		  <tr>
+    		<th style="background: #eee; color: #3e5fba;">내 용</th>
+			<td colspan="2" style="text-align:left">&nbsp;
+				<textarea rows="20" cols="98" name="content" id="_content" style="border: 1px solid #ddd; resize: none;"></textarea>
+			</td>
+		  </tr>
+		  
+		  <tr>
+			 <td colspan="2">
+				 <span class="button blue large">
+                 	<input type="button" id="btnOk" value="수정완료">
+				 </span>
+			 </td>
+		  </tr>
+		  
+		</table>
+	</form>
+</div>
+
+
+<script type="text/javascript">
+let url = "http://localhost:3000/";
+		
+//param seq 가져오기
+let seq = location.search.substr(location.search.lastIndexOf("=")+1);
+console.log(seq);
+	
+$(document).ready(function () {
+	//글정보 가져오기
+	$.ajax({
+		url:url+"getBbs",
+		type:"get",
+		data:{'seq':seq},
+		success:function(dto){ //alert(">>"+dto);
+			$("#_id").text(dto.id);
+			$("#_seq").val(dto.seq);
+			$("#_title").val(dto.title);
+			$("#_content").val(dto.content);
+			
+		},
+		error:function(){alert('error');}
+	});
+});
+
+$("#btnOk").on("click", function () {
+	let formData = $("#_frmForm").serialize();
+	$.ajax({
+		url:url+"updateBbs",
+		type:"get",
+		data:formData,
+		success:function(data){ //alert(">>"+data);
+			if(data > 0){
+				alert("수정완료");
+			}else{
+				alert("수정실패");
+			}
+			location.href = "bbslist.html";
+		},
+		error:function(){alert('error');}
+	});
+});
+
+</script>
+
+
+</body>
+</html>
+
+
+
+

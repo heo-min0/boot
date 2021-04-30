@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>게시판 상세페이지</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- 제이쿼리 -->
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- 부트스트랩 -->
+<link rel="stylesheet" type="text/css" href="../css/button.css">
+<link rel="stylesheet" type="text/css" href="../css/table.css">
+
+</head>
+<body>
+
+<!-- 검색부분 -->
+<div class="box_border" style="margin-top: 5px; margin-bottom: 10px">
+
+	<form action="" id="frmFormSearch" method="get">
+	
+		<table class="list_table" style="width: 85%" id="_list_table">
+		  <colgroup>
+		  	<col style="width:70px">
+		  	<col style="width:auto">
+		  </colgroup>
+		  
+		  <tr>
+    		<th style="background: #eee; color: #3e5fba;">작성자</th>
+			<td style="text-align:left">&nbsp;
+				<span id="_name"></span>
+			</td>
+		  </tr>
+		  
+		  <tr>
+    		<th style="background: #eee; color: #3e5fba;">제 목</th>
+			<td style="text-align:left">&nbsp;
+				<span id="_title"></span>
+			</td>
+		  </tr>
+		  
+		  <tr>
+    		<th style="background: #eee; color: #3e5fba;">작성일</th>
+			<td style="text-align:left">&nbsp;
+				<span id="_wdate"></span>
+			</td>
+		  </tr>
+		  
+		  <tr>
+    		<th style="background: #eee; color: #3e5fba;">내 용</th>
+			<td colspan="2" style="text-align:left">&nbsp;
+				<textarea rows="20" cols="98" id="_content" readonly="readonly" style="border: 1px solid #ddd; resize: none;"></textarea>
+			</td>
+		  </tr>
+		  
+		  <tr>
+			 <td colspan="2">
+			 	<span id="_admin">
+					 <span class="button blue large">
+	                 	<input type="button" value="글수정" onclick="updateBbs()">
+					 </span>
+					 <span class="button blue large">
+	                 	<input type="button" value="글삭제" onclick="deleteBbs()">
+					 </span>
+				</span>
+               	<span id="_user">
+					 <span class="button blue large">
+	                 	<input type="button" value="답글달기" onclick="answerbbs()">
+					 </span>
+                </span>
+			 </td>
+		  </tr>
+		  
+		</table>
+		
+	</form>
+	
+</div>
+
+
+
+<script type="text/javascript">
+let url = "http://localhost:3000/";
+
+//param seq 가져오기
+let urlParams = location.search.split(/[?&]/).slice(1).map(function(paramPair) {
+    	return paramPair.split(/=(.+)?/).slice(0, 2);
+	}).reduce(function(obj, pairArray) {
+	    obj[pairArray[0]] = pairArray[1];
+	    return obj;
+	}, {}); 
+let seq = urlParams.seq
+console.log(seq);
+/* let seq = location.href.substr(location.href.lastIndexOf("=")+1);
+console.log(seq); */
+
+//로그인 정보(세션) 가져오기
+let login = JSON.parse( sessionStorage.getItem("login") );
+console.log(login.id);
+
+//글정보 가져오기
+$.ajax({
+	url:url+"getBbs",
+	type:"get",
+	data:{'seq':seq},
+	success:function(dto){ //alert(">>"+dto);
+		$("#_name").html(dto.id);
+		$("#_title").html(dto.title);
+		$("#_wdate").html(dto.wdate);
+		$("#_content").val(dto.content);
+		
+		if(dto.id == login.id){
+			$("#_admin").show();
+			$("#_user").hide();
+		}else{
+			$("#_admin").hide();
+			$("#_user").show();
+		}
+	},
+	error:function(){alert('error');}
+});
+
+function updateBbs() {
+	location.href = "bbsupdate.html?seq="+seq;
+}
+
+function deleteBbs() {
+	$.ajax({
+		url:url+"deleteBbs",
+		type:"get",
+		data:{'seq':seq},
+		success:function(data){ //alert(">>"+data);
+			if(data > 0){
+				alert("삭제완료");
+			}else{
+				alert("삭제실패");
+			}
+			location.href = "bbslist.html";
+		},
+		error:function(){alert('error');}
+	});
+}
+
+function answerbbs() {
+	location.href = "bbsanswer.html?seq="+seq;	
+}
+
+</script>
+
+
+</body>
+</html>
+
+
+
+

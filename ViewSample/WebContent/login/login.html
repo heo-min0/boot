@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>로그인</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- 제이쿼리 -->
+<script src="http://lab.alexcican.com/set_cookies/cookie.js" type="text/javascript" ></script> <!-- 쿠키 -->
+
+<link rel="stylesheet" type="text/css" href="../css/button.css">
+<link rel="stylesheet" type="text/css" href="../css/table.css">
+
+</head>
+<body>
+
+<div id="main_wrap">
+	<div id="middle_wrap">
+		<div id="content_wrap">
+			
+			<div style="width: 502px; height: 166px; margin-left: auto; margin-right: auto;
+						position: relative; top: 100px;">
+								
+			<div class="login_title_warp">
+				<div style="margin-top: 20px">
+					<h2>My Home Page</h2>
+				</div>			
+			</div>
+			
+			<div id="login_wrap">
+				<form action="loginAF.do" name="frmForm" id="_frmForm" method="post">
+					
+					<table class="content_table" style="width: 75%">
+					
+						<colgroup>
+							<col style="width:20%">
+							<col style="width:80%">
+						</colgroup>
+					
+						<tr>
+							<th style="background: #eee; color: #3e5fba;">아이디</th>
+							<td>&nbsp;
+								<input type="text" id="_userid" name="id" size="20px" style="border: 1px solid #ddd" placeholder="ID">
+								<input type="checkbox" id="chk_save_id">ID 저장
+							</td>
+						</tr>
+						
+						<tr>
+							<th style="background: #eee; color: #3e5fba;">패스워드</th>
+							<td>&nbsp;
+								<input type="text" id="_pwd" name="pwd" size="20px" style="border: 1px solid #ddd" placeholder="Password">
+							</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2" style="height: 20px; text-align: center;">
+								<button type="button" id="_btnLogin">로그인</button>
+								<button type="button" id="_btnRegi">회원가입</button>
+							</td>
+						</tr>
+						
+					</table>
+				
+				</form>
+						
+			</div>
+			</div>		
+		</div>	
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+$("#_btnRegi").click(function () {
+	location.href = "regi.html";
+});
+
+$("#_btnLogin").click(function () {
+	if($("#_userid").val().trim() == ""){
+		alert("id를 입력해주세요");
+		$("#_id").focus();
+	}
+	else if($("#_pwd").val().trim() == ""){
+		alert("패스워드를 입력해주세요");
+		$("#_pwd").focus();
+	}
+	else{
+		//$("#_frmForm").submit();
+		let formData = $("#_frmForm").serialize();
+		
+		$.ajax({
+			type:"post",
+			url:"http://localhost:3000/login",
+			data:formData,
+			success:function(data){ //alert(data);
+				console.log(data);
+				
+				if(data==""){
+					alert("로그인실패");
+				}else{
+					sessionStorage.setItem("login",JSON.stringify(data));
+					location.href = "../bbs/bbslist.html";
+				}
+			},
+			error:function(){alert("error");}
+		});
+	}
+	
+});
+
+
+let user_id = $.cookie("user_id"); //쿠키 체크
+if(user_id != null){
+	$("#_userid").val( user_id );
+	$("#chk_save_id").attr("checked", "checked");
+}
+
+$("#chk_save_id").click(function() {
+	if( $("#chk_save_id").is(":checked") ){
+		if( $("#_userid").val().trim() == "" ){
+			alert('id를 입력해 주십시오');
+			$("#chk_save_id").prop("checked", false);			
+		}else{
+			/* var date = new Date();시간으로 설정
+			date.setTime(date.getTime() + 1*60*1000); */ // 1분
+			$.cookie("user_id", $("#_userid").val().trim(), { expires:1, path:'./'});
+		}
+	}
+	else{$.removeCookie("user_id", { path:'./' });}
+	
+});
+</script>
+
+
+
+</body>
+</html>
+
+
+

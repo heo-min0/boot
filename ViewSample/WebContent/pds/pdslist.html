@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>자료실</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- 제이쿼리 -->
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- 부트스트랩 -->
+<link rel="stylesheet" type="text/css" href="../css/button.css">
+<link rel="stylesheet" type="text/css" href="../css/table.css">
+
+</head>
+<body>
+
+<table class="list_table" style="width: 85%">
+	<colgroup>
+	  	<col style="width:50"><col style="width:100"><col style="width:300"><col style="width:50">
+	  	<col style="width:50"><col style="width:50"><col style="width:100"><col style="width:50">
+	</colgroup>
+	
+	<thead>
+		<tr>
+			<th>번호</th><th>작성자</th><th>제목</th><th>다운로드</th>
+			<th>조회수</th><th>다운수</th><th>작성일</th><th>삭제</th>
+		</tr>
+	</thead>
+	
+	<tbody>
+		<c:forEach var="pds" items="${pdslist}" varStatus="i">
+			<tr>
+				<th>${i.count}</th>
+				<td>${pds.id}</td>
+				<td style="text-align: left">
+					<a href="pdsdetail.do?seq=${pds.seq}">${pds.title}</a>
+				</td>
+				<td>
+					<input type="button" name="btnDown" value="다운로드" onclick="filedown('${pds.newfilename}','${pds.seq}')">
+				</td>
+				<td>${pds.readcount}</td>
+				<td>${pds.downcount}</td>
+				<td><font size="1">${pds.regdate}</font></td>
+				<td>
+					<img alt="" src="image/del.png" data_file_seq="${pds.seq}" class="btn_fileDelete">
+				</td>
+				
+			</tr>
+		</c:forEach>
+	</tbody>
+</table>
+
+<!-- 자료추가버튼 -->
+<div id="button.wrap">
+	<span class="button blue">
+		<button type="button" id="_btnAdd">자료추가</button>
+	</span>
+</div>
+
+<!-- 다운로드 버튼을 클릭했을시 -->
+<form name="file_Down" action="fileDownLoad.do" method="post">
+	<input type="hidden" name="newfilename">
+	<input type="hidden" name="seq">
+</form>
+
+
+
+<script type="text/javascript">
+let doc = document.file_Down;
+console.log(doc);
+
+$(".btn_fileDelete").on("click",function(){
+	let seq = $(this).attr("data_file_seq");
+	location.href="pdsdel.do?seq="+seq;
+});
+
+
+$("#_btnAdd").click(function(){
+	location.href="pdswrite.do";
+});
+
+function filedown(newfilename,seq) {
+	let doc = document.file_Down;
+	doc.newfilename.value = newfilename;
+	doc.seq.value = seq;
+	doc.submit();
+}
+
+</script>
+
+
+</body>
+</html>

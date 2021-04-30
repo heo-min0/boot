@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>upload file</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- 제이쿼리 -->
+</head>
+<body>
+
+<h3>upload file</h3>
+
+<form action="" id="upload_file_frm">
+	<input type="file" id="_uploadFile" name="uploadFile" accept="*">
+	<button type="button" id="uploadFileleBtn">파일업로드</button>
+	<p id="uploadResult"></p>
+</form>
+
+<br>
+
+<h3>download file</h3>
+
+<button type="button" id="downBtn">파일다운로드</button>
+
+
+<script type="text/javascript">
+$(document).ready(function () {
+
+	$("#uploadFileleBtn").click(function () {
+		
+		$.ajax({
+			url:"http://localhost:3000/fileUpload",
+			type:"post",
+			data:new FormData( $("#upload_file_frm")[0] ),
+			enctype:'multipart/form-data',
+			processData:false,
+			contentType:false,
+			cache:false,
+			success:function(data){
+				alert(">>"+data)
+				console.log(data);
+			},
+			error:function(){alert('error');}
+		});
+		
+	});
+	
+	
+	
+	$("#downBtn").click(function () {
+		
+		location.href ="http://localhost:3000/fileDownload?filename="+"1.png" ;
+		
+		/* 
+		$.ajax({
+			url:"http://localhost:3000/fileDownload",
+			type:"get",
+			data:{ filename:'axis.png'},
+			success:function(){
+				alert(">>sucess");
+			},
+			error:function(){alert('error');}
+		});
+		 */
+	})
+	
+	
+})
+
+
+
+</script>
+
+</body>
+</html>
